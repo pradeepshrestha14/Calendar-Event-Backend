@@ -12,6 +12,16 @@ function scheduleEmailNotification(event) {
   // Format the cron pattern
   const cronPattern = `0 ${minute} ${hour} ${month} ${day} *`;
 
+  console.log("date<<<<<<<<<<<<<<<<<", {
+    minute,
+    hour,
+    month,
+    day,
+
+    event,
+    eventDate,
+  });
+
   cron.schedule(cronPattern, function () {
     sendEmailNotification(event);
   });
