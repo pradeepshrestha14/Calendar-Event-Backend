@@ -1,7 +1,8 @@
 const express = require("express");
+const Event = require("../models/Event");
+
 const router = express.Router();
 
-const Event = require("../models/Event");
 const { scheduleEmailNotification } = require("../utils/util");
 
 // Endpoint to create a new event
