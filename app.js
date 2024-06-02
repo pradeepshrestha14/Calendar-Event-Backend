@@ -15,7 +15,8 @@ const app = express();
 app.use(cors());
 
 // MongoDB connection string
-const mongoURI = process.env.DB_MONGO_URL;
+const mongoURI =
+  "mongodb+srv://pradeepstha14:Dmj2DPVsnYP9Of87@clusterpradeep1.vfa7wr9.mongodb.net/?retryWrites=true&w=majority&appName=ClusterPradeep1";
 
 // Connect to MongoDB
 mongoose
