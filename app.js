@@ -1,23 +1,21 @@
-var createError = require("http-errors");
-var express = require("express");
+require("dotenv").config();
+const createError = require("http-errors");
+const express = require("express");
+const cors = require("cors");
 const mongoose = require("mongoose");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
 
-const nodemailer = require("nodemailer");
-const cron = require("node-cron");
+const indexRouter = require("./routes/index");
+const eventsRouter = require("./routes/events");
+const { scheduleEmailNotification } = require("./utils/util");
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-
-const transporter = require("./nodemail");
-
-var app = express();
+const app = express();
+app.use(cors());
 
 // MongoDB connection string
-const mongoURI =
-  "mongodb+srv://pradeepstha14:Dmj2DPVsnYP9Of87@clusterpradeep1.vfa7wr9.mongodb.net/?retryWrites=true&w=majority&appName=ClusterPradeep1";
+const mongoURI = process.env.DB_MONGO_URL;
 
 // Connect to MongoDB
 mongoose
@@ -31,12 +29,12 @@ mongoose
   .catch((err) => console.log(err));
 
 // Schedule email notifications for all events at server startup
-// const Event = require("./models/event");
-// Event.find().then((events) => {
-//   events.forEach((event) => {
-//     scheduleEmailNotification(event);
-//   });
-// });
+const Event = require("./models/event");
+Event.find().then((events) => {
+  events.forEach((event) => {
+    scheduleEmailNotification(event);
+  });
+});
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -49,10 +47,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
-app.use("/api/items", require("./routes/items"));
-app.use("/api/holidays", require("./routes/holidays"));
-app.use("/api/events", require("./routes/events"));
+app.use("/api/events", eventsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

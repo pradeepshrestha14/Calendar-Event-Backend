@@ -1,24 +1,12 @@
-// models/Item.js
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-
-// title,
-//       eventDate,
-//       description,
-//       startTime,
-//       endTime,
-//       participants,
-//       timezone,
 
 const eventSchema = new Schema({
   title: {
     type: String,
     required: true,
   },
-  timezone: {
-    type: String,
-    required: true,
-  },
+
   participants: [
     {
       type: String,
@@ -44,7 +32,17 @@ const eventSchema = new Schema({
     type: Date,
     required: true,
   },
+  eventEndDate: {
+    type: Date,
+    required: true,
+  },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
   createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model("Event", eventSchema);
+const Event = mongoose.models.Event || mongoose.model("Event", eventSchema);
+
+module.exports = Event;
