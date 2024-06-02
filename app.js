@@ -14,6 +14,20 @@ const { scheduleEmailNotification } = require("./utils/util");
 const app = express();
 app.use(cors());
 
+// Enable CORS for specific origins
+const allowedOrigins = ["http://localhost:5173"];
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+  })
+);
+
 // MongoDB connection string
 const mongoURI = process.env.DB_MONGO_URL;
 
